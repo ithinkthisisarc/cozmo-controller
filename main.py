@@ -16,7 +16,8 @@ def main(robot: cozmo.robot.Robot):
     robot.say_text("Starting manual control").wait_for_completed()
     robot.drive_off_charger_contacts().wait_for_completed()
     robot.drive_straight(distance_mm(100), speed_mmps(200)).wait_for_completed()
-    while 1:
+    loop = True
+    while loop == True:
         events = get_gamepad()
         for event in events:
             if event.code == "BTN_SOUTH" and event.state == 1:
@@ -51,5 +52,9 @@ def main(robot: cozmo.robot.Robot):
             elif event.code == "ABS_RX" and event.state <= -3000:
                 print("[inputs]", event.code, event.state, "\n  >TURNING LEFT\n")
                 robot.turn_in_place(degrees(45)).wait_for_completed()
+
+            if event.code == "BTN_START" and event.state == 1:
+                print("\n\t>KILLING PROGRAM, BYEBYE!!!\n")
+                loop = False
 
 cozmo.run_program(main)
